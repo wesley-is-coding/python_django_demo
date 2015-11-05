@@ -10,6 +10,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
+        self.browser.refresh()
         self.browser.quit()
 
     def check_for_row_in_list_table(self, row_text):
@@ -77,7 +78,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Francis gets his own unique URL
         francis_list_url = self.browser.current_url
-        self.assertRegex(francis_list_url, '/lists.+')
+        self.assertRegex(francis_list_url, '/lists/.+')
         self.assertNotEqual(francis_list_url, edith_list_url)
 
         # Again, there is no trace of Edith's list
@@ -97,7 +98,8 @@ class NewVisitorTest(LiveServerTestCase):
         # She starts a new list and sees the input is
         # nicely centered
         inputbox = self.browser.find_element_by_id('id_new_item')
-        inputbox.send_keys('testing\n')
+        inputbox.send_keys('testing')
+        # inputbox.send_keys(Keys.ENTER)
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
